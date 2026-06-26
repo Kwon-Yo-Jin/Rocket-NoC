@@ -1,0 +1,8 @@
+[submodule "rocket-chip"]
+	path = rocket-chip
+	url = git@github.com:Kwon-Yo-Jin/rocket-chip.git
+	branch = legacy
+[submodule "constellation"]
+	path = constellation
+	url = git@github.com:Kwon-Yo-Jin/constellation.git
+	branch = legacy
