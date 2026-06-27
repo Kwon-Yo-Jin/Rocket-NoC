@@ -128,5 +128,5 @@ object emulator extends Cross[Emulator](
   ("freechips.rocketchip.system.TestHarness", "tilenet.config.MultiNoCConfig"),
   ("freechips.rocketchip.system.TestHarness", "tilenet.config.SbusRingNoCConfig"),
   ("freechips.rocketchip.system.TestHarness", "tilenet.config.SbusMeshNoCConfig"),
-  ("tilenet.config.NoCTestHarness", "tilenet.config.SharedNoCConfig")
+  ("freechips.rocketchip.system.TestHarness", "tilenet.config.SharedNoCConfig")
 )

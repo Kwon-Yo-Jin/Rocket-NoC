@@ -1,24 +1,16 @@
 package tilenet.config
 
-import org.chipsalliance.cde.config.Config
-import freechips.rocketchip.rocket.{WithNBigCores, WithNHugeCores}
-import freechips.rocketchip.subsystem.{SystemBusKey, WithCoherentBusTopology, WithNBanks, WithNMemoryChannels}
-import freechips.rocketchip.system.BaseConfig
+import org.chipsalliance.cde.config.{Config}
+import freechips.rocketchip.subsystem.{SBUS, MBUS}
 
 import constellation.channel._
 import constellation.routing._
 import constellation.router._
 import constellation.topology._
 import constellation.noc._
-import constellation.protocol.{DiplomaticNetworkNodeMapping, GlobalTLNoCParams, SimpleTLNoCParams, SplitACDxBETLNoCParams}
-import constellation.soc.{GlobalNoCParams, WithCbusNoC, WithGlobalNoC, WithMbusNoC, WithSbusNoC}
+import constellation.soc.{GlobalNoCParams}
 
 import scala.collection.immutable.ListMap
-
-class WithSystemBusWidth(nBits: Int) extends Config((site, here, up) => {
-  case SystemBusKey =>
-    up(SystemBusKey, site).copy(beatBytes = nBits / 8)
-})
 
 /*
  * This config demonstrates a SoC architecture with three different
@@ -69,7 +61,51 @@ class WithSystemBusWidth(nBits: Int) extends Config((site, here, up) => {
  *   |______________|______________|______________|______________|
  */
 // DOC include start: MultiNoCConfig
-class MultiNoCConfig extends Config(new SingleRocketSbusRingNoCConfig)
+class MultiNoCConfig extends Config(
+  new constellation.soc.WithCbusNoC(constellation.protocol.SimpleTLNoCParams(
+    constellation.protocol.DiplomaticNetworkNodeMapping(
+      inNodeMapping = ListMap(
+        "serial_tl" -> 0),
+      outNodeMapping = ListMap(
+        "error" -> 1, "ctrls[0]" -> 2, "pbus" -> 3, "plic" -> 4,
+        "clint" -> 5, "dmInner" -> 6, "bootrom" -> 7, "clock" -> 8)),
+    NoCParams(
+      topology = TerminalRouter(BidirectionalLine(9)),
+      channelParamGen = (a, b) => UserChannelParams(Seq.fill(5) { UserVirtualChannelParams(4) }),
+      routingRelation = NonblockingVirtualSubnetworksRouting(TerminalRouterRouting(BidirectionalLineRouting()), 5, 1))
+  )) ++
+  new constellation.soc.WithMbusNoC(constellation.protocol.SimpleTLNoCParams(
+    constellation.protocol.DiplomaticNetworkNodeMapping(
+      inNodeMapping = ListMap(
+        "L2 InclusiveCache[0]" -> 1, "L2 InclusiveCache[1]" -> 2,
+        "L2 InclusiveCache[2]" -> 5, "L2 InclusiveCache[3]" -> 6),
+      outNodeMapping = ListMap(
+        "system[0]" -> 0, "system[1]" -> 3,  "system[2]" -> 4 , "system[3]" -> 7,
+        "ram[0]" -> 0)),
+    NoCParams(
+      topology        = TerminalRouter(BidirectionalTorus1D(8)),
+      channelParamGen = (a, b) => UserChannelParams(Seq.fill(10) { UserVirtualChannelParams(4) }),
+      routingRelation = BlockingVirtualSubnetworksRouting(TerminalRouterRouting(BidirectionalTorus1DShortestRouting()), 5, 2))
+  )) ++
+  new constellation.soc.WithSbusNoC(constellation.protocol.SimpleTLNoCParams(
+    constellation.protocol.DiplomaticNetworkNodeMapping(
+      inNodeMapping = ListMap(
+        "Core 0" -> 1, "Core 1" -> 2,  "Core 2" -> 4 , "Core 3" -> 7,
+        "Core 4" -> 8, "Core 5" -> 11, "Core 6" -> 13, "Core 7" -> 14,
+        "serial_tl" -> 0),
+      outNodeMapping = ListMap(
+        "system[0]" -> 5, "system[1]" -> 6, "system[2]" -> 9, "system[3]" -> 10,
+        "pbus" -> 3)),
+    NoCParams(
+      topology        = TerminalRouter(Mesh2D(4, 4)),
+      channelParamGen = (a, b) => UserChannelParams(Seq.fill(8) { UserVirtualChannelParams(4) }),
+      routingRelation = BlockingVirtualSubnetworksRouting(TerminalRouterRouting(Mesh2DEscapeRouting()), 5, 1))
+  )) ++
+  new freechips.rocketchip.rocket.WithNHugeCores(8) ++
+  new freechips.rocketchip.subsystem.WithNBanks(4) ++
+  new freechips.rocketchip.subsystem.WithNMemoryChannels(4) ++
+  new freechips.rocketchip.system.BaseConfig
+)
 // DOC include end: MultiNoCConfig
 
 /*
@@ -112,35 +148,64 @@ class MultiNoCConfig extends Config(new SingleRocketSbusRingNoCConfig)
  * spad   | MO  | ram[0]     |    9
  */
 // DOC include start: SharedNoCConfig
-class SharedNoCConfig extends Config(new SingleRocketSbusRingNoCConfig)
+class SharedNoCConfig extends Config(
+  new constellation.soc.WithGlobalNoC(GlobalNoCParams(
+    NoCParams(
+      topology        = TerminalRouter(HierarchicalTopology(
+        base     = UnidirectionalTorus1D(10),
+        children = Seq(HierarchicalSubTopology(1, 2, BidirectionalLine(5)),
+                       HierarchicalSubTopology(7, 2, BidirectionalLine(5))))),
+      channelParamGen = (a, b) => UserChannelParams(Seq.fill(22) { UserVirtualChannelParams(4) }),
+      routingRelation = NonblockingVirtualSubnetworksRouting(TerminalRouterRouting(HierarchicalRouting(
+        baseRouting = UnidirectionalTorus1DDatelineRouting(),
+        childRouting = Seq(BidirectionalLineRouting(),
+                           BidirectionalLineRouting()))), 10, 2)
+    )
+  )) ++
+  new constellation.soc.WithMbusNoC(constellation.protocol.GlobalTLNoCParams(
+    constellation.protocol.DiplomaticNetworkNodeMapping(
+      inNodeMapping = ListMap(
+        "Cache[0]" -> 0, "Cache[1]" -> 2, "Cache[2]" -> 8, "Cache[3]" -> 6),
+      outNodeMapping = ListMap(
+        "system[0]" -> 3, "system[1]" -> 5,
+        "ram[0]" -> 9))
+  )) ++
+  new constellation.soc.WithSbusNoC(constellation.protocol.GlobalTLNoCParams(
+    constellation.protocol.DiplomaticNetworkNodeMapping(
+      inNodeMapping = ListMap(
+        "serial_tl" -> 9, "Core 0" -> 2,
+        "Core 1" -> 10, "Core 2" -> 11, "Core 3" -> 13, "Core 4" -> 14,
+        "Core 5" -> 15, "Core 6" -> 16, "Core 7" -> 18, "Core 8" -> 19),
+      outNodeMapping = ListMap(
+        "system[0]" -> 0, "system[1]" -> 2, "system[2]" -> 8, "system[3]" -> 6,
+        "pbus" -> 4))
+  )) ++
+  new freechips.rocketchip.rocket.WithNHugeCores(8) ++
+  new freechips.rocketchip.subsystem.WithNBanks(4) ++
+  new freechips.rocketchip.subsystem.WithNMemoryChannels(2) ++
+  new freechips.rocketchip.system.BaseConfig
+)
 // DOC include end: SharedNoCConfig
 
 // This Config implements a simple ring interconnect for the system bus
 class SbusRingNoCConfig extends Config(
-  new WithSbusNoC(SplitACDxBETLNoCParams(
-    DiplomaticNetworkNodeMapping(
+  new constellation.soc.WithSbusNoC(constellation.protocol.SplitACDxBETLNoCParams(
+    constellation.protocol.DiplomaticNetworkNodeMapping(
       inNodeMapping = ListMap(
-        "Core 0 DCache[0]" -> 0,
-        "Core 1 DCache[0]" -> 1,
-        "Core 2 DCache[0]" -> 2,
-        "Core 3 DCache[0]" -> 3,
-        "Core 4 DCache[0]" -> 4,
-        "Core 5 DCache[0]" -> 5,
-        "Core 6 DCache[0]" -> 6,
-        "Core 7 DCache[0]" -> 7,
-        "slave-port-axi4" -> 8,
+        "Core 0" -> 0,
+        "Core 1" -> 1,
+        "Core 2" -> 2,
+        "Core 3" -> 3,
+        "Core 4" -> 4,
+        "Core 5" -> 5,
+        "Core 6" -> 6,
+        "Core 7" -> 7,
         "serial_tl" -> 8),
       outNodeMapping = ListMap(
         "system[0]" -> 9,
         "system[1]" -> 10,
         "system[2]" -> 11,
         "system[3]" -> 12,
-        "ldut[0]" -> 9,
-        "ldut[1]" -> 10,
-        "ldut[2]" -> 11,
-        "ldut[3]" -> 12,
-        "ldut[4]" -> 8,
-        "error" -> 8,
         "pbus" -> 8)), // TSI is on the pbus, so serial-tl and pbus should be on the same node
     acdNoCParams = NoCParams(
       topology        = UnidirectionalTorus1D(13),
@@ -151,43 +216,35 @@ class SbusRingNoCConfig extends Config(
       channelParamGen = (a, b) => UserChannelParams(Seq.fill(4) { UserVirtualChannelParams(1) }),
       routingRelation = NonblockingVirtualSubnetworksRouting(UnidirectionalTorus1DDatelineRouting(), 2, 2))
   )) ++
-  new WithNHugeCores(8) ++
-  new WithNBanks(4) ++
-  new WithCoherentBusTopology ++
-  new BaseConfig
+  new freechips.rocketchip.rocket.WithNHugeCores(8) ++
+  new freechips.rocketchip.subsystem.WithNBanks(4) ++
+  new freechips.rocketchip.system.BaseConfig
 )
 
 // This config integrates a mesh interconnect for the system bus, and divides the system bus
 // tilelink messages across two isolated interconnects
 class SbusMeshNoCConfig extends Config(
-  new WithSbusNoC(SplitACDxBETLNoCParams(
-    DiplomaticNetworkNodeMapping(
+  new constellation.soc.WithSbusNoC(constellation.protocol.SplitACDxBETLNoCParams(
+    constellation.protocol.DiplomaticNetworkNodeMapping(
       inNodeMapping = ListMap(
-        "Core 0 DCache[0]" -> 0,
-        "Core 1 DCache[0]" -> 1,
-        "Core 2 DCache[0]" -> 2,
-        "Core 3 DCache[0]" -> 3,
-        "Core 4 DCache[0]" -> 4,
-        "Core 5 DCache[0]" -> 7,
-        "Core 6 DCache[0]" -> 8,
-        "Core 7 DCache[0]" -> 11,
-        "Core 8 DCache[0]" -> 12,
-        "Core 9 DCache[0]" -> 13,
-        "Core 10 DCache[0]" -> 14,
-        "Core 11 DCache[0]" -> 15,
-        "slave-port-axi4" -> 0,
+        "Core 0 " -> 0,
+        "Core 1 " -> 1,
+        "Core 2 " -> 2,
+        "Core 3 " -> 3,
+        "Core 4 " -> 4,
+        "Core 5 " -> 7,
+        "Core 6 " -> 8,
+        "Core 7 " -> 11,
+        "Core 8 " -> 12,
+        "Core 9 " -> 13,
+        "Core 10 " -> 14,
+        "Core 11 " -> 15,
         "serial_tl" -> 0),
       outNodeMapping = ListMap(
         "system[0]" -> 5,
         "system[1]" -> 6,
         "system[2]" -> 9,
         "system[3]" -> 10,
-        "ldut[0]" -> 5,
-        "ldut[1]" -> 6,
-        "ldut[2]" -> 9,
-        "ldut[3]" -> 10,
-        "ldut[4]" -> 0,
-        "error" -> 0,
         "pbus" -> 0)), // TSI is on the pbus, so serial-tl and pbus should be on the same node
     acdNoCParams = NoCParams(
       topology        = Mesh2D(4, 4),
@@ -203,55 +260,32 @@ class SbusMeshNoCConfig extends Config(
     ),
     beDivision = 4
   ), inlineNoC = true) ++
-  new WithNHugeCores(12) ++
-  new WithNBanks(4) ++
-  new WithSystemBusWidth(128) ++
-  new WithCoherentBusTopology ++
-  new BaseConfig
-)
-
-
-class SingleRocketSbusRingNoCConfig extends Config(
-  new WithSbusNoC(SimpleTLNoCParams(
-    DiplomaticNetworkNodeMapping(
-      inNodeMapping = ListMap(
-        "Core 0" -> 0,
-        "slave-port-axi4" -> 1),
-      outNodeMapping = ListMap(
-        "error" -> 1,
-        "ldut" -> 2)),
-    nocParams = NoCParams(
-      topology = TerminalRouter(BidirectionalLine(3)),
-      channelParamGen = { (_, _) =>
-        UserChannelParams(Seq.fill(5) { UserVirtualChannelParams(4) })
-      },
-      routingRelation =
-        NonblockingVirtualSubnetworksRouting(TerminalRouterRouting(BidirectionalLineRouting()), 5, 1))
-  )) ++
-  new WithNBigCores(1) ++
-  new WithNBanks(1) ++
-  new WithCoherentBusTopology ++
-  new BaseConfig
+  new freechips.rocketchip.rocket.WithNHugeCores(12) ++
+  new freechips.rocketchip.subsystem.WithNBanks(4) ++
+  new chipyard.config.WithSystemBusWidth(128) ++
+  new freechips.rocketchip.system.BaseConfig
 )
 
 class QuadRocketSbusRingNoCConfig extends Config(
-  new WithSbusNoC(SimpleTLNoCParams(
-    DiplomaticNetworkNodeMapping(
+  new constellation.soc.WithSbusNoC(constellation.protocol.SimpleTLNoCParams(
+    constellation.protocol.DiplomaticNetworkNodeMapping(
       inNodeMapping = ListMap(
-        "Core 0" -> 0,
-        "Core 1" -> 1,
-        "Core 2" -> 2,
-        "Core 3" -> 3,
-        "slave-port-axi4" -> 4),
+        "Core 0 " -> 0,
+        "Core 1 " -> 1,
+        "Core 2 " -> 2,
+        "Core 3 " -> 3,
+        "serial_tl" -> 4),
       outNodeMapping = ListMap(
-        "error" -> 4,
-        "ldut" -> 5)),
+        "system[0]" -> 5,
+        "system[1]" -> 6,
+        "system[2]" -> 7,
+        "system[3]" -> 8,
+        "pbus" -> 4)), // TSI is on the pbus, so serial-tl and pbus should be on the same node
     nocParams = NoCParams(
-      topology        = TerminalRouter(BidirectionalLine(9)),
+      topology        = UnidirectionalTorus1D(9),
       channelParamGen = (a, b) => UserChannelParams(Seq.fill(10) { UserVirtualChannelParams(4) }),
-      routingRelation = NonblockingVirtualSubnetworksRouting(TerminalRouterRouting(BidirectionalLineRouting()), 5, 2))
+      routingRelation = NonblockingVirtualSubnetworksRouting(UnidirectionalTorus1DDatelineRouting(), 5, 2))
   )) ++
-  new WithNHugeCores(4) ++
-  new WithNBanks(4) ++
-  new WithCoherentBusTopology ++
-  new BaseConfig)
+  new freechips.rocketchip.rocket.WithNHugeCores(4) ++
+  new freechips.rocketchip.subsystem.WithNBanks(4) ++
+  new freechips.rocketchip.system.BaseConfig)
