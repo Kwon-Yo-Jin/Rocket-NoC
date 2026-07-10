@@ -58,6 +58,8 @@ object generator extends ChiselIvyModule {
   override def sources = T.sources {
     Seq(
       PathRef(os.pwd / "rocket-chip" / "src" / "main" / "scala"),
+      PathRef(os.pwd / "rocket-chip-blocks" / "src" / "main" / "scala"),
+      PathRef(os.pwd / "rocket-chip-inclusive-cache" / "design" / "craft" / "inclusivecache" / "src"),
       PathRef(os.pwd / "constellation" / "src" / "main" / "scala" / "channel"),
       PathRef(os.pwd / "constellation" / "src" / "main" / "scala" / "noc"),
       PathRef(os.pwd / "constellation" / "src" / "main" / "scala" / "protocol"),

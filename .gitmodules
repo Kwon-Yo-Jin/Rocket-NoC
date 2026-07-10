@@ -6,3 +6,9 @@
 	path = constellation
 	url = git@github.com:Kwon-Yo-Jin/constellation.git
 	branch = legacy
+[submodule "rocket-chip-blocks"]
+	path = rocket-chip-blocks
+	url = https://github.com/chipsalliance/rocket-chip-blocks.git
+[submodule "rocket-chip-inclusive-cache"]
+	path = rocket-chip-inclusive-cache
+	url = https://github.com/chipsalliance/rocket-chip-inclusive-cache.git

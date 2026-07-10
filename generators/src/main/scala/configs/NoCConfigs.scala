@@ -104,6 +104,7 @@ class MultiNoCConfig extends Config(
   new freechips.rocketchip.rocket.WithNHugeCores(8) ++
   new freechips.rocketchip.subsystem.WithNBanks(4) ++
   new freechips.rocketchip.subsystem.WithNMemoryChannels(4) ++
+  new freechips.rocketchip.subsystem.WithCoherentBusTopology ++
   new freechips.rocketchip.system.BaseConfig
 )
 // DOC include end: MultiNoCConfig
@@ -183,6 +184,7 @@ class SharedNoCConfig extends Config(
   new freechips.rocketchip.rocket.WithNHugeCores(8) ++
   new freechips.rocketchip.subsystem.WithNBanks(4) ++
   new freechips.rocketchip.subsystem.WithNMemoryChannels(2) ++
+  new freechips.rocketchip.subsystem.WithCoherentBusTopology ++
   new freechips.rocketchip.system.BaseConfig
 )
 // DOC include end: SharedNoCConfig
@@ -218,6 +220,7 @@ class SbusRingNoCConfig extends Config(
   )) ++
   new freechips.rocketchip.rocket.WithNHugeCores(8) ++
   new freechips.rocketchip.subsystem.WithNBanks(4) ++
+  new freechips.rocketchip.subsystem.WithCoherentBusTopology ++
   new freechips.rocketchip.system.BaseConfig
 )
 
@@ -262,7 +265,8 @@ class SbusMeshNoCConfig extends Config(
   ), inlineNoC = true) ++
   new freechips.rocketchip.rocket.WithNHugeCores(12) ++
   new freechips.rocketchip.subsystem.WithNBanks(4) ++
-  new chipyard.config.WithSystemBusWidth(128) ++
+  new tilenet.config.WithSystemBusWidth(128) ++
+  new freechips.rocketchip.subsystem.WithCoherentBusTopology ++
   new freechips.rocketchip.system.BaseConfig
 )
 
@@ -274,13 +278,14 @@ class QuadRocketSbusRingNoCConfig extends Config(
         "Core 1 " -> 1,
         "Core 2 " -> 2,
         "Core 3 " -> 3,
-        "serial_tl" -> 4),
+        "slave-port-axi4" -> 4),
       outNodeMapping = ListMap(
-        "system[0]" -> 5,
-        "system[1]" -> 6,
-        "system[2]" -> 7,
-        "system[3]" -> 8,
-        "pbus" -> 4)), // TSI is on the pbus, so serial-tl and pbus should be on the same node
+        "ldut[0]" -> 5,
+        "ldut[1]" -> 6,
+        "ldut[2]" -> 7,
+        "ldut[3]" -> 8,
+        "ldut[4]" -> 4,
+        "bootrom[0]" -> 4)), // TSI is on the pbus, so serial-tl and pbus should be on the same node
     nocParams = NoCParams(
       topology        = UnidirectionalTorus1D(9),
       channelParamGen = (a, b) => UserChannelParams(Seq.fill(10) { UserVirtualChannelParams(4) }),
@@ -288,4 +293,6 @@ class QuadRocketSbusRingNoCConfig extends Config(
   )) ++
   new freechips.rocketchip.rocket.WithNHugeCores(4) ++
   new freechips.rocketchip.subsystem.WithNBanks(4) ++
+  new freechips.rocketchip.subsystem.WithInclusiveCache ++
+  new freechips.rocketchip.subsystem.WithCoherentBusTopology ++
   new freechips.rocketchip.system.BaseConfig)
