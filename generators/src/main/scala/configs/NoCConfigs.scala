@@ -65,7 +65,7 @@ class MultiNoCConfig extends Config(
   new constellation.soc.WithCbusNoC(constellation.protocol.SimpleTLNoCParams(
     constellation.protocol.DiplomaticNetworkNodeMapping(
       inNodeMapping = ListMap(
-        "serial_tl" -> 0),
+        "slave-port-axi4" -> 0),
       outNodeMapping = ListMap(
         "error" -> 1, "ctrls[0]" -> 2, "pbus" -> 3, "plic" -> 4,
         "clint" -> 5, "dmInner" -> 6, "bootrom" -> 7, "clock" -> 8)),
@@ -92,10 +92,11 @@ class MultiNoCConfig extends Config(
       inNodeMapping = ListMap(
         "Core 0" -> 1, "Core 1" -> 2,  "Core 2" -> 4 , "Core 3" -> 7,
         "Core 4" -> 8, "Core 5" -> 11, "Core 6" -> 13, "Core 7" -> 14,
-        "serial_tl" -> 0),
+        "slave-port-axi4" -> 0),
       outNodeMapping = ListMap(
-        "system[0]" -> 5, "system[1]" -> 6, "system[2]" -> 9, "system[3]" -> 10,
-        "pbus" -> 3)),
+        "L2 InclusiveCache[0]" -> 5, "L2 InclusiveCache[1]" -> 6,
+        "L2 InclusiveCache[2]" -> 9, "L2 InclusiveCache[3]" -> 10,
+        "system[0]" -> 3, "bootrom[0]" -> 3)),
     NoCParams(
       topology        = TerminalRouter(Mesh2D(4, 4)),
       channelParamGen = (a, b) => UserChannelParams(Seq.fill(8) { UserVirtualChannelParams(4) }),
@@ -104,6 +105,7 @@ class MultiNoCConfig extends Config(
   new freechips.rocketchip.rocket.WithNHugeCores(8) ++
   new freechips.rocketchip.subsystem.WithNBanks(4) ++
   new freechips.rocketchip.subsystem.WithNMemoryChannels(4) ++
+  new freechips.rocketchip.subsystem.WithInclusiveCache ++
   new freechips.rocketchip.subsystem.WithCoherentBusTopology ++
   new freechips.rocketchip.system.BaseConfig
 )
@@ -166,7 +168,8 @@ class SharedNoCConfig extends Config(
   new constellation.soc.WithMbusNoC(constellation.protocol.GlobalTLNoCParams(
     constellation.protocol.DiplomaticNetworkNodeMapping(
       inNodeMapping = ListMap(
-        "Cache[0]" -> 0, "Cache[1]" -> 2, "Cache[2]" -> 8, "Cache[3]" -> 6),
+        "L2 InclusiveCache[0]" -> 0, "L2 InclusiveCache[1]" -> 2,
+        "L2 InclusiveCache[2]" -> 8, "L2 InclusiveCache[3]" -> 6),
       outNodeMapping = ListMap(
         "system[0]" -> 3, "system[1]" -> 5,
         "ram[0]" -> 9))
@@ -178,12 +181,14 @@ class SharedNoCConfig extends Config(
         "Core 1" -> 10, "Core 2" -> 11, "Core 3" -> 13, "Core 4" -> 14,
         "Core 5" -> 15, "Core 6" -> 16, "Core 7" -> 18, "Core 8" -> 19),
       outNodeMapping = ListMap(
-        "system[0]" -> 0, "system[1]" -> 2, "system[2]" -> 8, "system[3]" -> 6,
+        "L2 InclusiveCache[0]" -> 0, "L2 InclusiveCache[1]" -> 2,
+        "L2 InclusiveCache[2]" -> 8, "L2 InclusiveCache[3]" -> 6,
         "pbus" -> 4))
   )) ++
   new freechips.rocketchip.rocket.WithNHugeCores(8) ++
   new freechips.rocketchip.subsystem.WithNBanks(4) ++
   new freechips.rocketchip.subsystem.WithNMemoryChannels(2) ++
+  new freechips.rocketchip.subsystem.WithInclusiveCache ++
   new freechips.rocketchip.subsystem.WithCoherentBusTopology ++
   new freechips.rocketchip.system.BaseConfig
 )
@@ -204,10 +209,10 @@ class SbusRingNoCConfig extends Config(
         "Core 7" -> 7,
         "serial_tl" -> 8),
       outNodeMapping = ListMap(
-        "system[0]" -> 9,
-        "system[1]" -> 10,
-        "system[2]" -> 11,
-        "system[3]" -> 12,
+        "L2 InclusiveCache[0]" -> 9,
+        "L2 InclusiveCache[1]" -> 10,
+        "L2 InclusiveCache[2]" -> 11,
+        "L2 InclusiveCache[3]" -> 12,
         "pbus" -> 8)), // TSI is on the pbus, so serial-tl and pbus should be on the same node
     acdNoCParams = NoCParams(
       topology        = UnidirectionalTorus1D(13),
@@ -220,6 +225,7 @@ class SbusRingNoCConfig extends Config(
   )) ++
   new freechips.rocketchip.rocket.WithNHugeCores(8) ++
   new freechips.rocketchip.subsystem.WithNBanks(4) ++
+  new freechips.rocketchip.subsystem.WithInclusiveCache ++
   new freechips.rocketchip.subsystem.WithCoherentBusTopology ++
   new freechips.rocketchip.system.BaseConfig
 )
@@ -244,10 +250,10 @@ class SbusMeshNoCConfig extends Config(
         "Core 11 " -> 15,
         "serial_tl" -> 0),
       outNodeMapping = ListMap(
-        "system[0]" -> 5,
-        "system[1]" -> 6,
-        "system[2]" -> 9,
-        "system[3]" -> 10,
+        "L2 InclusiveCache[0]" -> 5,
+        "L2 InclusiveCache[1]" -> 6,
+        "L2 InclusiveCache[2]" -> 9,
+        "L2 InclusiveCache[3]" -> 10,
         "pbus" -> 0)), // TSI is on the pbus, so serial-tl and pbus should be on the same node
     acdNoCParams = NoCParams(
       topology        = Mesh2D(4, 4),
@@ -266,6 +272,7 @@ class SbusMeshNoCConfig extends Config(
   new freechips.rocketchip.rocket.WithNHugeCores(12) ++
   new freechips.rocketchip.subsystem.WithNBanks(4) ++
   new tilenet.config.WithSystemBusWidth(128) ++
+  new freechips.rocketchip.subsystem.WithInclusiveCache ++
   new freechips.rocketchip.subsystem.WithCoherentBusTopology ++
   new freechips.rocketchip.system.BaseConfig
 )
@@ -280,11 +287,11 @@ class QuadRocketSbusRingNoCConfig extends Config(
         "Core 3 " -> 3,
         "slave-port-axi4" -> 4),
       outNodeMapping = ListMap(
-        "ldut[0]" -> 5,
-        "ldut[1]" -> 6,
-        "ldut[2]" -> 7,
-        "ldut[3]" -> 8,
-        "ldut[4]" -> 4,
+        "L2 InclusiveCache[0]" -> 5,
+        "L2 InclusiveCache[1]" -> 6,
+        "L2 InclusiveCache[2]" -> 7,
+        "L2 InclusiveCache[3]" -> 8,
+        "system[0]" -> 4,
         "bootrom[0]" -> 4)), // TSI is on the pbus, so serial-tl and pbus should be on the same node
     nocParams = NoCParams(
       topology        = UnidirectionalTorus1D(9),

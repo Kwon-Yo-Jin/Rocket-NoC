@@ -12,3 +12,6 @@
 [submodule "rocket-chip-inclusive-cache"]
 	path = rocket-chip-inclusive-cache
 	url = https://github.com/chipsalliance/rocket-chip-inclusive-cache.git
+[submodule "testchipip"]
+	path = testchipip
+	url = https://github.com/ucb-bar/testchipip.git
