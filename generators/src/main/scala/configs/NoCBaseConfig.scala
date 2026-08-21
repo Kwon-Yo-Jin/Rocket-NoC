@@ -81,20 +81,20 @@ class NoCBaseConfig extends Config(
   new freechips.rocketchip.subsystem.WithNoSlavePort ++                /** no top-level MMIO slave port (overrides default set in rocketchip) */
 
   // MMIO device section
-  // new chipyard.config.WithUART ++                                  /** add a UART */
+  new tilenet.config.fragment.WithUART ++                                  /** add a UART */
 
 
   // ================================================
   //   Set up Debug/Bringup/Testing Features
   // ================================================
   // JTAG
-  new freechips.rocketchip.subsystem.WithDebugSBA ++                /** enable the SBA (system-bus-access) feature of the debug module */
-  // new chipyard.config.WithDebugModuleAbstractDataWords(8) ++        /** increase debug module data word capacity */
-  new freechips.rocketchip.subsystem.WithJtagDTM ++                 /** set the debug module to expose a JTAG port */
+  new freechips.rocketchip.subsystem.WithDebugSBA ++                 /** enable the SBA (system-bus-access) feature of the debug module */
+  new tilenet.config.fragment.WithDebugModuleAbstractDataWords(8) ++ /** increase debug module data word capacity */
+  new freechips.rocketchip.subsystem.WithJtagDTM ++                  /** set the debug module to expose a JTAG port */
 
   // Boot Select Pins
-  // new testchipip.boot.WithCustomBootPin ++                          /** add a custom-boot-pin to support pin-driven boot address */
-  // new testchipip.boot.WithBootAddrReg ++                            /** add a boot-addr-reg for configurable boot address */
+  new testchipip.boot.WithCustomBootPin ++                          /** add a custom-boot-pin to support pin-driven boot address */
+  new testchipip.boot.WithBootAddrReg ++                            /** add a boot-addr-reg for configurable boot address */
 
 
   // ================================================
@@ -115,7 +115,7 @@ class NoCBaseConfig extends Config(
   // ================================================
   // On-chip memory section
   new freechips.rocketchip.subsystem.WithDTS("pace", Nil) ++ /** custom device name for DTS (embedded in BootROM) */
-  // new chipyard.config.WithBootROM ++                                     /** use default bootrom */
+  new tilenet.config.fragment.WithBootROM ++                                     /** use default bootrom */
   // new testchipip.soc.WithMbusScratchpad(base = 0x08000000,               /** add 64 KiB on-chip scratchpad */
   //                                       size = 64 * 1024) ++
 
@@ -134,7 +134,7 @@ class NoCBaseConfig extends Config(
   // new chipyard.clocking.WithPassthroughClockGenerator ++
 
   // DigitalTop-internal clocking settings
-  new freechips.rocketchip.subsystem.WithDontDriveBusClocksFromSBus ++  /** leave the bus clocks undriven by sbus */
+  // new freechips.rocketchip.subsystem.WithDontDriveBusClocksFromSBus ++  /** leave the bus clocks undriven by sbus */
   new freechips.rocketchip.subsystem.WithClockGateModel ++              /** add default EICG_wrapper clock gate model */
   // new chipyard.clocking.WithClockGroupsCombinedByName(("uncore",        /** create a "uncore" clock group tieing all the bus clocks together */
   //   Seq("sbus", "mbus", "pbus", "fbus", "cbus", "obus", "implicit", "clock_tap"),

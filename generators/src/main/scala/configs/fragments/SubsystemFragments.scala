@@ -1,4 +1,4 @@
-package tilenet.config
+package tilenet.config.fragment
 
 import org.chipsalliance.cde.config.{Config}
 import freechips.rocketchip.subsystem._

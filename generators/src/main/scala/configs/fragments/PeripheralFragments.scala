@@ -1,4 +1,4 @@
-package tilenet.config
+package tilenet.config.fragment
 
 import scala.util.matching.Regex
 import chisel3._
@@ -18,7 +18,7 @@ import sifive.blocks.devices.spi._
 import sifive.blocks.devices.i2c._
 import sifive.blocks.devices.timer._
 
-// import testchipip._
+import testchipip._
 
 // import chipyard.{ExtTLMem}
 
@@ -35,8 +35,8 @@ class WithBootROM(address: BigInt = 0x10000, size: Int = 0x10000, hang: BigInt =
       .map(_.copy(
         address = address,
         size = size,
-        hang = hang
-//        contentFileName = ResourceFileName(s"/testchipip/bootrom/bootrom.rv${site(MaxXLen)}.img")
+        hang = hang,
+        contentFileName = ResourceFileName(s"/testchipip/bootrom/bootrom.rv${site(MaxXLen)}.img")
       ))
 })
 
@@ -168,8 +168,8 @@ class WithRadBootROM(address: BigInt = 0x10000, size: Int = 0x10000, hang: BigIn
     .map(_.copy(
       address = address,
       size = size,
-      hang = hang
-//      contentFileName = ResourceFileName(s"/testchipip/bootrom/bootrom.radiance.rv32.img")
+      hang = hang,
+      contentFileName = ResourceFileName(s"/testchipip/bootrom/bootrom.radiance.rv32.img")
     ))
 })
 

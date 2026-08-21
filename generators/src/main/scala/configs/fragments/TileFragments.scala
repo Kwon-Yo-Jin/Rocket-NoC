@@ -1,4 +1,4 @@
-package tilenet.config
+package tilenet.config.fragment
 
 import chisel3._
 
@@ -8,7 +8,7 @@ import freechips.rocketchip.subsystem._
 import freechips.rocketchip.rocket.{RocketCoreParams, MulDivParams, DCacheParams, ICacheParams}
 import freechips.rocketchip.diplomacy._
 
-// import testchipip.cosim.{TracePortKey, TracePortParams}
+import testchipip.cosim.{TracePortKey, TracePortParams}
 // import barf.{TilePrefetchingMasterPortParams}
 import freechips.rocketchip.trace.{TraceEncoderParams, TraceCoreParams}
 // import shuttle.common.{ShuttleTileAttachParams}
@@ -74,7 +74,7 @@ class WithTraceIO extends Config((site, here, up) => {
     }
     TilePlugins.applyInjectors(updated, TilePlugins.traceEnableInjectors)
   }
-//  case TracePortKey => Some(TracePortParams())
+  case TracePortKey => Some(TracePortParams())
 })
 
 class WithNoTraceIO extends Config((site, here, up) => {
@@ -88,7 +88,7 @@ class WithNoTraceIO extends Config((site, here, up) => {
     }
     TilePlugins.applyInjectors(updated, TilePlugins.traceDisableInjectors)
   }
-//  case TracePortKey => None
+  case TracePortKey => None
 })
 
 class WithNPerfCounters(n: Int = 29) extends Config((site, here, up) => {

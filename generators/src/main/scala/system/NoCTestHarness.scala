@@ -8,10 +8,12 @@ import constellation.soc.CanHaveGlobalNoC
 import freechips.rocketchip.devices.debug.Debug
 import freechips.rocketchip.system.{ExampleRocketSystem, ExampleRocketSystemModuleImp, SimAXIMem}
 import freechips.rocketchip.util.AsyncResetReg
+import testchipip.soc.CanHaveSubsystemInjectors
 
 class ExampleRocketNoCSystem(implicit p: Parameters)
     extends ExampleRocketSystem
-    with CanHaveGlobalNoC {
+    with CanHaveGlobalNoC 
+    with CanHaveSubsystemInjectors {
   override lazy val module = new ExampleRocketSystemModuleImp(this)
 }
 

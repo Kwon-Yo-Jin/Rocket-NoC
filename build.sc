@@ -52,7 +52,10 @@ object generator extends ChiselIvyModule {
   override def moduleDeps = super.moduleDeps ++ Seq(macros, hardfloat, diplomacy)
   override def ivyDeps = T(super.ivyDeps() ++ Agg(v.mainargs, v.json4sJackson))
   override def resources = T.sources {
-    Seq(PathRef(os.pwd / "rocket-chip" / "src" / "main" / "resources"))
+    Seq(
+      PathRef(os.pwd / "rocket-chip" / "src" / "main" / "resources"),
+      PathRef(os.pwd / "testchipip" / "src" / "main" / "resources")
+    )
   }
 
   override def sources = T.sources {
@@ -60,6 +63,7 @@ object generator extends ChiselIvyModule {
       PathRef(os.pwd / "rocket-chip" / "src" / "main" / "scala"),
       PathRef(os.pwd / "rocket-chip-blocks" / "src" / "main" / "scala"),
       PathRef(os.pwd / "rocket-chip-inclusive-cache" / "design" / "craft" / "inclusivecache" / "src"),
+      PathRef(os.pwd / "testchipip" / "src" / "main" / "scala"),
       PathRef(os.pwd / "constellation" / "src" / "main" / "scala" / "channel"),
       PathRef(os.pwd / "constellation" / "src" / "main" / "scala" / "noc"),
       PathRef(os.pwd / "constellation" / "src" / "main" / "scala" / "protocol"),
@@ -125,10 +129,13 @@ trait Emulator extends Cross.Module2[String, String] {
 
 object emulator extends Cross[Emulator](
   ("freechips.rocketchip.system.TestHarness", "freechips.rocketchip.system.DefaultConfig"),
-  ("freechips.rocketchip.system.TestHarness", "tilenet.config.SingleRocketSbusRingNoCConfig"),
   ("freechips.rocketchip.system.TestHarness", "tilenet.config.QuadRocketSbusRingNoCConfig"),
   ("freechips.rocketchip.system.TestHarness", "tilenet.config.MultiNoCConfig"),
   ("freechips.rocketchip.system.TestHarness", "tilenet.config.SbusRingNoCConfig"),
   ("freechips.rocketchip.system.TestHarness", "tilenet.config.SbusMeshNoCConfig"),
-  ("freechips.rocketchip.system.TestHarness", "tilenet.config.SharedNoCConfig")
+  ("tilenet.config.NoCTestHarness", "tilenet.config.QuadRocketSbusRingNoCConfig"),
+  ("tilenet.config.NoCTestHarness", "tilenet.config.MultiNoCConfig"),
+  ("tilenet.config.NoCTestHarness", "tilenet.config.SbusRingNoCConfig"),
+  ("tilenet.config.NoCTestHarness", "tilenet.config.SbusMeshNoCConfig"),
+  ("tilenet.config.NoCTestHarness", "tilenet.config.SharedNoCConfig")
 )

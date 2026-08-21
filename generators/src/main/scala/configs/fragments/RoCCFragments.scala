@@ -1,4 +1,4 @@
-package tilenet.config
+package tilenet.config.fragment
 
 import chisel3._
 
