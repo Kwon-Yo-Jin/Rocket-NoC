@@ -80,8 +80,7 @@ class MultiNoCConfig extends Config(
         "L2 InclusiveCache[0]" -> 1, "L2 InclusiveCache[1]" -> 2,
         "L2 InclusiveCache[2]" -> 5, "L2 InclusiveCache[3]" -> 6),
       outNodeMapping = ListMap(
-        "Memory Channel[0]" -> 0, "Memory Channel[1]" -> 3,
-        "Memory Channel[2]" -> 4, "Memory Channel[3]" -> 7,
+        "ldut[0]" -> 0, "ldut[1]" -> 3,  "ldut[2]" -> 4 , "ldut[3]" -> 7,
         "ram[0]" -> 0)),
     NoCParams(
       topology        = TerminalRouter(BidirectionalTorus1D(8)),
@@ -170,7 +169,7 @@ class SharedNoCConfig extends Config(
         "L2 InclusiveCache[0]" -> 0, "L2 InclusiveCache[1]" -> 2,
         "L2 InclusiveCache[2]" -> 8, "L2 InclusiveCache[3]" -> 6),
       outNodeMapping = ListMap(
-        "Memory Channel[0]" -> 3, "Memory Channel[1]" -> 5))
+        "ldut[0]" -> 3, "ldut[1]" -> 5))
   )) ++
   new constellation.soc.WithSbusNoC(constellation.protocol.GlobalTLNoCParams(
     constellation.protocol.DiplomaticNetworkNodeMapping(

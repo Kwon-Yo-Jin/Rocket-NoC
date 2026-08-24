@@ -123,6 +123,7 @@ class NoCBaseConfig extends Config(
   new freechips.rocketchip.subsystem.WithInclusiveCache ++          /** use Sifive LLC cache as root of coherence */
 
   // Bus/interconnect settings
+  new freechips.rocketchip.subsystem.WithoutTLMonitors ++
   new freechips.rocketchip.subsystem.WithCoherentBusTopology ++     /** hierarchical buses including sbus/mbus/pbus/fbus/cbus/l2 */
 
   // ================================================
