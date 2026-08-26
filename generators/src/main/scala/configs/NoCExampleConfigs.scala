@@ -96,7 +96,7 @@ class MultiNoCConfig extends Config(
       outNodeMapping = ListMap(
         "L2 InclusiveCache[0]" -> 5, "L2 InclusiveCache[1]" -> 6,
         "L2 InclusiveCache[2]" -> 9, "L2 InclusiveCache[3]" -> 10,
-        "system[0]" -> 3, "bootrom[0]" -> 3)),
+        "ldut[0]" -> 3, "bootrom[0]" -> 3)),
     NoCParams(
       topology        = TerminalRouter(Mesh2D(4, 4)),
       channelParamGen = (a, b) => UserChannelParams(Seq.fill(8) { UserVirtualChannelParams(4) }),
@@ -180,7 +180,8 @@ class SharedNoCConfig extends Config(
       outNodeMapping = ListMap(
         "L2 InclusiveCache[0]" -> 0, "L2 InclusiveCache[1]" -> 2,
         "L2 InclusiveCache[2]" -> 8, "L2 InclusiveCache[3]" -> 6,
-        "bootrom" -> 4))
+        "bootrom" -> 4,
+        "ldut[0]" -> 4))
   )) ++
   new freechips.rocketchip.rocket.WithNHugeCores(8) ++
   new freechips.rocketchip.subsystem.WithNBanks(4) ++
@@ -208,6 +209,7 @@ class SbusRingNoCConfig extends Config(
         "L2 InclusiveCache[1]" -> 10,
         "L2 InclusiveCache[2]" -> 11,
         "L2 InclusiveCache[3]" -> 12,
+        "ldut[0]" -> 8,
         "bootrom" -> 8)), // TSI is on the pbus, so serial-tl and pbus should be on the same node
     acdNoCParams = NoCParams(
       topology        = UnidirectionalTorus1D(13),
@@ -247,7 +249,8 @@ class SbusMeshNoCConfig extends Config(
         "L2 InclusiveCache[1]" -> 6,
         "L2 InclusiveCache[2]" -> 9,
         "L2 InclusiveCache[3]" -> 10,
-        "bootrom" -> 0)), // TSI is on the pbus, so serial-tl and pbus should be on the same node
+        "bootrom" -> 0,
+        "ldut[0]" -> 0)), // TSI is on the pbus, so serial-tl and pbus should be on the same node
     acdNoCParams = NoCParams(
       topology        = Mesh2D(4, 4),
       channelParamGen = (a, b) => UserChannelParams(Seq.fill(3) { UserVirtualChannelParams(3) }, unifiedBuffer = false),
@@ -282,7 +285,8 @@ class QuadRocketSbusRingNoCConfig extends Config(
         "L2 InclusiveCache[1]" -> 6,
         "L2 InclusiveCache[2]" -> 7,
         "L2 InclusiveCache[3]" -> 8,
-        "bootrom[0]" -> 4)), // TSI is on the pbus, so serial-tl and pbus should be on the same node
+        "bootrom[0]" -> 4,
+        "ldut[0]" -> 4)), // TSI is on the pbus, so serial-tl and pbus should be on the same node
     nocParams = NoCParams(
       topology        = UnidirectionalTorus1D(9),
       channelParamGen = (a, b) => UserChannelParams(Seq.fill(10) { UserVirtualChannelParams(4) }),

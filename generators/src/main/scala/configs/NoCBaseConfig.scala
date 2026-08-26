@@ -77,7 +77,7 @@ class NoCBaseConfig extends Config(
   //   )
   // )) ++
   new freechips.rocketchip.subsystem.WithNMemoryChannels(1) ++         /** Default 1 AXI-4 memory channels */
-  new freechips.rocketchip.subsystem.WithNoMMIOPort ++                 /** no top-level MMIO master port (overrides default set in rocketchip) */
+  // new freechips.rocketchip.subsystem.WithNoMMIOPort ++                 /** no top-level MMIO master port (overrides default set in rocketchip) */
   new freechips.rocketchip.subsystem.WithNoSlavePort ++                /** no top-level MMIO slave port (overrides default set in rocketchip) */
 
   // MMIO device section
