@@ -137,5 +137,6 @@ object emulator extends Cross[Emulator](
   ("tilenet.system.NoCTestHarness", "tilenet.config.MultiNoCConfig"),
   ("tilenet.system.NoCTestHarness", "tilenet.config.SbusRingNoCConfig"),
   ("tilenet.system.NoCTestHarness", "tilenet.config.SbusMeshNoCConfig"),
-  ("tilenet.system.NoCTestHarness", "tilenet.config.SharedNoCConfig")
+  ("tilenet.system.NoCTestHarness", "tilenet.config.SharedNoCConfig"),
+  ("tilenet.system.ExampleRocketNoCSystem", "tilenet.config.SbusMeshNoCConfig")
 )

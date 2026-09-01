@@ -80,8 +80,7 @@ class MultiNoCConfig extends Config(
         "L2 InclusiveCache[0]" -> 1, "L2 InclusiveCache[1]" -> 2,
         "L2 InclusiveCache[2]" -> 5, "L2 InclusiveCache[3]" -> 6),
       outNodeMapping = ListMap(
-        "ldut[0]" -> 0, "ldut[1]" -> 3,  "ldut[2]" -> 4 , "ldut[3]" -> 7,
-        "ram[0]" -> 0)),
+        "ldut[0]" -> 0, "ldut[1]" -> 3,  "ldut[2]" -> 4 , "ldut[3]" -> 7)),
     NoCParams(
       topology        = TerminalRouter(BidirectionalTorus1D(8)),
       channelParamGen = (a, b) => UserChannelParams(Seq.fill(10) { UserVirtualChannelParams(4) }),
@@ -96,7 +95,7 @@ class MultiNoCConfig extends Config(
       outNodeMapping = ListMap(
         "L2 InclusiveCache[0]" -> 5, "L2 InclusiveCache[1]" -> 6,
         "L2 InclusiveCache[2]" -> 9, "L2 InclusiveCache[3]" -> 10,
-        "ldut[0]" -> 3, "bootrom[0]" -> 3)),
+        "ldut[0]" -> 3, "bootrom[0]" -> 12)),
     NoCParams(
       topology        = TerminalRouter(Mesh2D(4, 4)),
       channelParamGen = (a, b) => UserChannelParams(Seq.fill(8) { UserVirtualChannelParams(4) }),
@@ -250,7 +249,8 @@ class SbusMeshNoCConfig extends Config(
         "L2 InclusiveCache[2]" -> 9,
         "L2 InclusiveCache[3]" -> 10,
         "bootrom" -> 0,
-        "ldut[0]" -> 0)), // TSI is on the pbus, so serial-tl and pbus should be on the same node
+        "ldut[0]" -> 0,
+        "gen[0]" -> 0)), // TSI is on the pbus, so serial-tl and pbus should be on the same node
     acdNoCParams = NoCParams(
       topology        = Mesh2D(4, 4),
       channelParamGen = (a, b) => UserChannelParams(Seq.fill(3) { UserVirtualChannelParams(3) }, unifiedBuffer = false),
