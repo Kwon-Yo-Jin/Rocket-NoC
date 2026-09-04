@@ -1,4 +1,4 @@
-package tilenet.config.fragment
+package rocketnoc.config.fragment
 
 import chisel3._
 

@@ -86,6 +86,7 @@ trait Emulator extends Cross.Module2[String, String] {
       val dest = T.dest
       os.proc(
         mill.util.Jvm.javaExe,
+        "-Xmx16g",
         "-jar",
         generator.assembly().path,
         "--dir", dest.toString,
@@ -129,14 +130,17 @@ trait Emulator extends Cross.Module2[String, String] {
 
 object emulator extends Cross[Emulator](
   ("freechips.rocketchip.system.TestHarness", "freechips.rocketchip.system.DefaultConfig"),
-  ("freechips.rocketchip.system.TestHarness", "tilenet.config.QuadRocketSbusRingNoCConfig"),
-  ("freechips.rocketchip.system.TestHarness", "tilenet.config.MultiNoCConfig"),
-  ("freechips.rocketchip.system.TestHarness", "tilenet.config.SbusRingNoCConfig"),
-  ("freechips.rocketchip.system.TestHarness", "tilenet.config.SbusMeshNoCConfig"),
-  ("tilenet.system.NoCTestHarness", "tilenet.config.QuadRocketSbusRingNoCConfig"),
-  ("tilenet.system.NoCTestHarness", "tilenet.config.MultiNoCConfig"),
-  ("tilenet.system.NoCTestHarness", "tilenet.config.SbusRingNoCConfig"),
-  ("tilenet.system.NoCTestHarness", "tilenet.config.SbusMeshNoCConfig"),
-  ("tilenet.system.NoCTestHarness", "tilenet.config.SharedNoCConfig"),
-  ("tilenet.system.ExampleRocketNoCSystem", "tilenet.config.SbusMeshNoCConfig")
+  ("freechips.rocketchip.system.TestHarness", "rocketnoc.config.QuadRocketSbusRingNoCConfig"),
+  ("freechips.rocketchip.system.TestHarness", "rocketnoc.config.MultiNoCConfig"),
+  ("freechips.rocketchip.system.TestHarness", "rocketnoc.config.SbusRingNoCConfig"),
+  ("freechips.rocketchip.system.TestHarness", "rocketnoc.config.SbusMeshNoCConfig"),
+  ("rocketnoc.system.RocketSystem", "rocketnoc.config.QuadRocketSbusRingNoCConfig"),
+  ("rocketnoc.system.RocketSystem", "rocketnoc.config.MultiNoCConfig"),
+  ("rocketnoc.system.RocketSystem", "rocketnoc.config.SbusRingNoCConfig"),
+  ("rocketnoc.system.RocketSystem", "rocketnoc.config.SbusMeshNoCConfig"),
+  ("rocketnoc.system.RocketSystem", "rocketnoc.config.SharedNoCConfig"),
+  ("rocketnoc.system.RocketSystem", "rocketnoc.config.SbusMesh64BigCoreNoCConfig"),
+  ("rocketnoc.system.RocketSystem", "rocketnoc.config.GlobalMesh64BigCoreNoCConfig"),
+  ("rocketnoc.system.RocketSystem", "rocketnoc.config.DefaultConfig"),
+  ("rocketnoc.system.RocketSystem", "rocketnoc.config.ClusterConfig")
 )

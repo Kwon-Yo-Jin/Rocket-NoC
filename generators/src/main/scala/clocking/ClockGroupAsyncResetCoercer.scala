@@ -1,4 +1,4 @@
-package tilenet.clocking
+package rocketnoc.clocking
 
 import freechips.rocketchip.prci.ClockGroupAdapterNode
 import org.chipsalliance.cde.config.{Config, Field, Parameters}

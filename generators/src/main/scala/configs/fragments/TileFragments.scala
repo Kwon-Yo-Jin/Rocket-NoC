@@ -1,4 +1,4 @@
-package tilenet.config.fragment
+package rocketnoc.config.fragment
 
 import chisel3._
 
@@ -29,7 +29,7 @@ private object TilePlugins {
   private lazy val providers: Seq[TilePluginProvider] = Nil
 //  private lazy val providers: Seq[TilePluginProvider] = {
 //    // val reflections = new Reflections("chipyard")
-//    val reflections = new Reflections("tilenet")
+//    val reflections = new Reflections("rocketnoc")
 //    val subs = reflections.getSubTypesOf(classOf[TilePluginProvider]).asScala.toSeq.distinct
 //    subs.flatMap { cls =>
 //      try Some(cls.getDeclaredConstructor().newInstance())

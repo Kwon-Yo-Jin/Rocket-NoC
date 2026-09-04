@@ -1,4 +1,4 @@
-package tilenet.clocking
+package rocketnoc.clocking
 
 import chisel3._
 import chisel3.util._

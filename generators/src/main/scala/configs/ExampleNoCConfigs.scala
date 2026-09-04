@@ -1,4 +1,4 @@
-package tilenet.config
+package rocketnoc.config
 
 import org.chipsalliance.cde.config.{Config}
 import freechips.rocketchip.subsystem.{SBUS, MBUS}
@@ -80,7 +80,7 @@ class MultiNoCConfig extends Config(
         "L2 InclusiveCache[0]" -> 1, "L2 InclusiveCache[1]" -> 2,
         "L2 InclusiveCache[2]" -> 5, "L2 InclusiveCache[3]" -> 6),
       outNodeMapping = ListMap(
-        "ldut[0]" -> 0, "ldut[1]" -> 3,  "ldut[2]" -> 4 , "ldut[3]" -> 7)),
+        "gen[0]" -> 0, "gen[1]" -> 3,  "gen[2]" -> 4 , "gen[3]" -> 7)),
     NoCParams(
       topology        = TerminalRouter(BidirectionalTorus1D(8)),
       channelParamGen = (a, b) => UserChannelParams(Seq.fill(10) { UserVirtualChannelParams(4) }),
@@ -95,7 +95,7 @@ class MultiNoCConfig extends Config(
       outNodeMapping = ListMap(
         "L2 InclusiveCache[0]" -> 5, "L2 InclusiveCache[1]" -> 6,
         "L2 InclusiveCache[2]" -> 9, "L2 InclusiveCache[3]" -> 10,
-        "ldut[0]" -> 3, "bootrom[0]" -> 12)),
+        "gen[0]" -> 3, "bootrom[0]" -> 12)),
     NoCParams(
       topology        = TerminalRouter(Mesh2D(4, 4)),
       channelParamGen = (a, b) => UserChannelParams(Seq.fill(8) { UserVirtualChannelParams(4) }),
@@ -104,7 +104,7 @@ class MultiNoCConfig extends Config(
   new freechips.rocketchip.rocket.WithNHugeCores(8) ++
   new freechips.rocketchip.subsystem.WithNBanks(4) ++
   new freechips.rocketchip.subsystem.WithNMemoryChannels(4) ++
-  new tilenet.config.NoCBaseConfig
+  new rocketnoc.config.NoCBaseConfig
 )
 // DOC include end: MultiNoCConfig
 
@@ -168,7 +168,7 @@ class SharedNoCConfig extends Config(
         "L2 InclusiveCache[0]" -> 0, "L2 InclusiveCache[1]" -> 2,
         "L2 InclusiveCache[2]" -> 8, "L2 InclusiveCache[3]" -> 6),
       outNodeMapping = ListMap(
-        "ldut[0]" -> 3, "ldut[1]" -> 5))
+        "gen[0]" -> 3, "gen[1]" -> 5))
   )) ++
   new constellation.soc.WithSbusNoC(constellation.protocol.GlobalTLNoCParams(
     constellation.protocol.DiplomaticNetworkNodeMapping(
@@ -180,12 +180,12 @@ class SharedNoCConfig extends Config(
         "L2 InclusiveCache[0]" -> 0, "L2 InclusiveCache[1]" -> 2,
         "L2 InclusiveCache[2]" -> 8, "L2 InclusiveCache[3]" -> 6,
         "bootrom" -> 4,
-        "ldut[0]" -> 4))
+        "gen[0]" -> 4))
   )) ++
   new freechips.rocketchip.rocket.WithNHugeCores(8) ++
   new freechips.rocketchip.subsystem.WithNBanks(4) ++
   new freechips.rocketchip.subsystem.WithNMemoryChannels(2) ++
-  new tilenet.config.NoCBaseConfig
+  new rocketnoc.config.NoCBaseConfig
 )
 // DOC include end: SharedNoCConfig
 
@@ -208,7 +208,7 @@ class SbusRingNoCConfig extends Config(
         "L2 InclusiveCache[1]" -> 10,
         "L2 InclusiveCache[2]" -> 11,
         "L2 InclusiveCache[3]" -> 12,
-        "ldut[0]" -> 8,
+        "gen[0]" -> 8,
         "bootrom" -> 8)), // TSI is on the pbus, so serial-tl and pbus should be on the same node
     acdNoCParams = NoCParams(
       topology        = UnidirectionalTorus1D(13),
@@ -221,7 +221,7 @@ class SbusRingNoCConfig extends Config(
   )) ++
   new freechips.rocketchip.rocket.WithNHugeCores(8) ++
   new freechips.rocketchip.subsystem.WithNBanks(4) ++
-  new tilenet.config.NoCBaseConfig
+  new rocketnoc.config.NoCBaseConfig
 )
 
 // This config integrates a mesh interconnect for the system bus, and divides the system bus
@@ -249,7 +249,6 @@ class SbusMeshNoCConfig extends Config(
         "L2 InclusiveCache[2]" -> 9,
         "L2 InclusiveCache[3]" -> 10,
         "bootrom" -> 0,
-        "ldut[0]" -> 0,
         "gen[0]" -> 0)), // TSI is on the pbus, so serial-tl and pbus should be on the same node
     acdNoCParams = NoCParams(
       topology        = Mesh2D(4, 4),
@@ -267,8 +266,8 @@ class SbusMeshNoCConfig extends Config(
   ), inlineNoC = true) ++
   new freechips.rocketchip.rocket.WithNHugeCores(12) ++
   new freechips.rocketchip.subsystem.WithNBanks(4) ++
-  new tilenet.config.fragment.WithSystemBusWidth(128) ++
-  new tilenet.config.NoCBaseConfig
+  new rocketnoc.config.fragment.WithSystemBusWidth(128) ++
+  new rocketnoc.config.NoCBaseConfig
 )
 
 class QuadRocketSbusRingNoCConfig extends Config(
@@ -286,7 +285,7 @@ class QuadRocketSbusRingNoCConfig extends Config(
         "L2 InclusiveCache[2]" -> 7,
         "L2 InclusiveCache[3]" -> 8,
         "bootrom[0]" -> 4,
-        "ldut[0]" -> 4)), // TSI is on the pbus, so serial-tl and pbus should be on the same node
+        "gen[0]" -> 4)), // TSI is on the pbus, so serial-tl and pbus should be on the same node
     nocParams = NoCParams(
       topology        = UnidirectionalTorus1D(9),
       channelParamGen = (a, b) => UserChannelParams(Seq.fill(10) { UserVirtualChannelParams(4) }),
@@ -294,5 +293,5 @@ class QuadRocketSbusRingNoCConfig extends Config(
   )) ++
   new freechips.rocketchip.rocket.WithNHugeCores(4) ++
   new freechips.rocketchip.subsystem.WithNBanks(4) ++
-  new tilenet.config.NoCBaseConfig
+  new rocketnoc.config.NoCBaseConfig
 )

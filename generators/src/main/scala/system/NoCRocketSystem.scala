@@ -1,4 +1,4 @@
-package tilenet.system
+package rocketnoc.system
 
 import chisel3._
 import org.chipsalliance.cde.config.Parameters
@@ -12,7 +12,7 @@ import freechips.rocketchip.tilelink.TLAdapterNode
 import freechips.rocketchip.util.AsyncResetReg
 import testchipip.soc.CanHaveSubsystemInjectors
 
-object ExampleRocketNoCSystem {
+object RocketSystem {
   private def nameInclusiveCacheManagers(p: Parameters): Parameters = {
     val coherence = p(SubsystemBankedCoherenceKey)
     p.alterPartial { case SubsystemBankedCoherenceKey =>
@@ -30,11 +30,11 @@ object ExampleRocketNoCSystem {
   }
 }
 
-class ExampleRocketNoCSystem(implicit p: Parameters)
-    extends ExampleRocketSystem()(ExampleRocketNoCSystem.nameInclusiveCacheManagers(p))
+class RocketSystem(implicit p: Parameters)
+    extends ExampleRocketSystem()(RocketSystem.nameInclusiveCacheManagers(p))
     with CanHaveGlobalNoC 
     with CanHaveSubsystemInjectors {
-  override lazy val module = new ExampleRocketNoCSystemModuleImp(this)
+  override lazy val module = new RocketSystemModuleImp(this)
 }
 
-class ExampleRocketNoCSystemModuleImp[+L <: ExampleRocketNoCSystem](_outer: L) extends ExampleRocketSystemModuleImp(_outer)
+class RocketSystemModuleImp[+L <: RocketSystem](_outer: L) extends ExampleRocketSystemModuleImp(_outer)

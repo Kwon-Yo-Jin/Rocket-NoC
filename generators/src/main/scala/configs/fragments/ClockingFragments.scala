@@ -1,4 +1,4 @@
-package tilenet.config.fragment
+package rocketnoc.config.fragment
 
 import scala.util.matching.Regex
 import chisel3._

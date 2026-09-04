@@ -5,3 +5,4 @@ test_run_dir
 *.txt
 *.png
 *.log
+*.svg

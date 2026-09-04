@@ -1,4 +1,4 @@
-package tilenet.config
+package rocketnoc.config
 
 import org.chipsalliance.cde.config.{Config}
 
@@ -81,7 +81,7 @@ class NoCBaseConfig extends Config(
   new freechips.rocketchip.subsystem.WithNoSlavePort ++                /** no top-level MMIO slave port (overrides default set in rocketchip) */
 
   // MMIO device section
-  new tilenet.config.fragment.WithUART ++                                  /** add a UART */
+  new rocketnoc.config.fragment.WithUART ++                                  /** add a UART */
 
 
   // ================================================
@@ -89,7 +89,7 @@ class NoCBaseConfig extends Config(
   // ================================================
   // JTAG
   new freechips.rocketchip.subsystem.WithDebugSBA ++                 /** enable the SBA (system-bus-access) feature of the debug module */
-  new tilenet.config.fragment.WithDebugModuleAbstractDataWords(8) ++ /** increase debug module data word capacity */
+  new rocketnoc.config.fragment.WithDebugModuleAbstractDataWords(8) ++ /** increase debug module data word capacity */
   new freechips.rocketchip.subsystem.WithJtagDTM ++                  /** set the debug module to expose a JTAG port */
 
   // Boot Select Pins
@@ -115,7 +115,7 @@ class NoCBaseConfig extends Config(
   // ================================================
   // On-chip memory section
   new freechips.rocketchip.subsystem.WithDTS("pace", Nil) ++ /** custom device name for DTS (embedded in BootROM) */
-  new tilenet.config.fragment.WithBootROM ++                                     /** use default bootrom */
+  new rocketnoc.config.fragment.WithBootROM ++                                     /** use default bootrom */
   // new testchipip.soc.WithMbusScratchpad(base = 0x08000000,               /** add 64 KiB on-chip scratchpad */
   //                                       size = 64 * 1024) ++
 

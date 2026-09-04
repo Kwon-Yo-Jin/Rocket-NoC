@@ -1,7 +1,10 @@
-make clean
+make clean_all
 make verilog
-make verilog TOP=tilenet.system.NoCTestHarness CONFIG=tilenet.config.QuadRocketSbusRingNoCConfig
-make verilog TOP=tilenet.system.NoCTestHarness CONFIG=tilenet.config.MultiNoCConfig
-make verilog TOP=tilenet.system.NoCTestHarness CONFIG=tilenet.config.SbusRingNoCConfig
-make verilog TOP=tilenet.system.NoCTestHarness CONFIG=tilenet.config.SbusMeshNoCConfig
-make verilog TOP=tilenet.system.NoCTestHarness CONFIG=tilenet.config.SharedNoCConfig
+make verilog CONFIG=QuadRocketSbusRingNoCConfig
+make verilog CONFIG=MultiNoCConfig
+make verilog CONFIG=SbusRingNoCConfig
+make verilog CONFIG=SbusMeshNoCConfig
+make verilog CONFIG=SharedNoCConfig
+make verilog CONFIG=SbusMesh64BigCoreNoCConfig
+make vis CONFIG=SbusMesh64BigCoreNoCConfig
+make verilog CONFIG=GlobalMesh64BigCoreNoCConfig

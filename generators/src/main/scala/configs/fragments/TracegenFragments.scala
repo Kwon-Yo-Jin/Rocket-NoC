@@ -1,4 +1,4 @@
-//  package tilenet.config
+//  package rocketnoc.config
 
 //  import org.chipsalliance.cde.config.{Config, Field, Parameters}
 //  import tracegen.{TraceGenSystem}
