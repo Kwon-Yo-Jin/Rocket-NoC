@@ -32,6 +32,7 @@ class SbusMesh64BigCoreNoCConfig extends Config(
   new rocketnoc.config.fragment.WithRV32IMAFC ++
   new freechips.rocketchip.rocket.WithNBigCores(64) ++
   new freechips.rocketchip.subsystem.WithNBanks(8) ++
+  new freechips.rocketchip.subsystem.WithInclusiveCache ++
   new rocketnoc.config.fragment.WithSystemBusWidth(128) ++
   new rocketnoc.config.NoCBaseConfig
 )
@@ -73,6 +74,7 @@ class GlobalMesh64BigCoreNoCConfig extends Config(
   new rocketnoc.config.fragment.WithRV32IMAFC ++
   new freechips.rocketchip.rocket.WithNBigCores(64) ++
   new freechips.rocketchip.subsystem.WithNBanks(8) ++
+  new freechips.rocketchip.subsystem.WithInclusiveCache ++
   new rocketnoc.config.fragment.WithSystemBusWidth(128) ++
   new rocketnoc.config.NoCBaseConfig
 )
@@ -80,7 +82,8 @@ class GlobalMesh64BigCoreNoCConfig extends Config(
 class DefaultConfig extends Config(
   new rocketnoc.config.fragment.WithRV32IMAFC ++
   new freechips.rocketchip.rocket.WithNBigCores(128) ++
-  new freechips.rocketchip.subsystem.WithNBanks(16) ++
+//  new freechips.rocketchip.subsystem.WithNBanks(16) ++
+//  new freechips.rocketchip.subsystem.WithInclusiveCache ++
   new rocketnoc.config.fragment.WithSystemBusWidth(512) ++
   new rocketnoc.config.NoCBaseConfig
 )

@@ -142,5 +142,11 @@ object emulator extends Cross[Emulator](
   ("rocketnoc.system.RocketSystem", "rocketnoc.config.SbusMesh64BigCoreNoCConfig"),
   ("rocketnoc.system.RocketSystem", "rocketnoc.config.GlobalMesh64BigCoreNoCConfig"),
   ("rocketnoc.system.RocketSystem", "rocketnoc.config.DefaultConfig"),
-  ("rocketnoc.system.RocketSystem", "rocketnoc.config.ClusterConfig")
+  ("rocketnoc.system.RocketSystem", "rocketnoc.config.ClusterConfig"),
+  ("rocketnoc.system.RocketSystem", "rocketnoc.config.FPGADefaultNCoreConfig"),
+  ("rocketnoc.system.RocketSystem", "rocketnoc.config.FPGASbusRingNCoreConfig"),
+  ("rocketnoc.system.RocketSystem", "rocketnoc.config.FPGASbusSplitRingNCoreConfig"),
+  ("rocketnoc.system.RocketSystem", "rocketnoc.config.FPGASbusMeshNCoreConfig"),
+  ("rocketnoc.system.RocketSystem", "rocketnoc.config.FPGASbusRucheNCoreConfig"),
+  ("rocketnoc.system.RocketSystem", "rocketnoc.config.FPGASbus2DTorusNCoreConfig")
 )

@@ -103,6 +103,7 @@ class MultiNoCConfig extends Config(
   )) ++
   new freechips.rocketchip.rocket.WithNHugeCores(8) ++
   new freechips.rocketchip.subsystem.WithNBanks(4) ++
+  new freechips.rocketchip.subsystem.WithInclusiveCache ++
   new freechips.rocketchip.subsystem.WithNMemoryChannels(4) ++
   new rocketnoc.config.NoCBaseConfig
 )
@@ -184,6 +185,7 @@ class SharedNoCConfig extends Config(
   )) ++
   new freechips.rocketchip.rocket.WithNHugeCores(8) ++
   new freechips.rocketchip.subsystem.WithNBanks(4) ++
+  new freechips.rocketchip.subsystem.WithInclusiveCache ++
   new freechips.rocketchip.subsystem.WithNMemoryChannels(2) ++
   new rocketnoc.config.NoCBaseConfig
 )
@@ -221,6 +223,7 @@ class SbusRingNoCConfig extends Config(
   )) ++
   new freechips.rocketchip.rocket.WithNHugeCores(8) ++
   new freechips.rocketchip.subsystem.WithNBanks(4) ++
+  new freechips.rocketchip.subsystem.WithInclusiveCache ++
   new rocketnoc.config.NoCBaseConfig
 )
 
@@ -266,6 +269,7 @@ class SbusMeshNoCConfig extends Config(
   ), inlineNoC = true) ++
   new freechips.rocketchip.rocket.WithNHugeCores(12) ++
   new freechips.rocketchip.subsystem.WithNBanks(4) ++
+  new freechips.rocketchip.subsystem.WithInclusiveCache ++
   new rocketnoc.config.fragment.WithSystemBusWidth(128) ++
   new rocketnoc.config.NoCBaseConfig
 )
@@ -285,7 +289,7 @@ class QuadRocketSbusRingNoCConfig extends Config(
         "L2 InclusiveCache[2]" -> 7,
         "L2 InclusiveCache[3]" -> 8,
         "bootrom[0]" -> 4,
-        "gen[0]" -> 4)), // TSI is on the pbus, so serial-tl and pbus should be on the same node
+        "gen[0]" -> 4)),
     nocParams = NoCParams(
       topology        = UnidirectionalTorus1D(9),
       channelParamGen = (a, b) => UserChannelParams(Seq.fill(10) { UserVirtualChannelParams(4) }),
@@ -293,5 +297,6 @@ class QuadRocketSbusRingNoCConfig extends Config(
   )) ++
   new freechips.rocketchip.rocket.WithNHugeCores(4) ++
   new freechips.rocketchip.subsystem.WithNBanks(4) ++
+  new freechips.rocketchip.subsystem.WithInclusiveCache ++
   new rocketnoc.config.NoCBaseConfig
 )

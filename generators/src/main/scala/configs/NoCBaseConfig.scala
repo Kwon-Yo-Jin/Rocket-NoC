@@ -120,7 +120,7 @@ class NoCBaseConfig extends Config(
   //                                       size = 64 * 1024) ++
 
   // Coherency settings
-  new freechips.rocketchip.subsystem.WithInclusiveCache ++          /** use Sifive LLC cache as root of coherence */
+  // new freechips.rocketchip.subsystem.WithInclusiveCache ++          /** use Sifive LLC cache as root of coherence */
 
   // Bus/interconnect settings
   new freechips.rocketchip.subsystem.WithoutTLMonitors ++
@@ -136,7 +136,7 @@ class NoCBaseConfig extends Config(
 
   // DigitalTop-internal clocking settings
   // new freechips.rocketchip.subsystem.WithDontDriveBusClocksFromSBus ++  /** leave the bus clocks undriven by sbus */
-  new freechips.rocketchip.subsystem.WithClockGateModel ++              /** add default EICG_wrapper clock gate model */
+  // new freechips.rocketchip.subsystem.WithClockGateModel ++              /** add default EICG_wrapper clock gate model */
   // new chipyard.clocking.WithClockGroupsCombinedByName(("uncore",        /** create a "uncore" clock group tieing all the bus clocks together */
   //   Seq("sbus", "mbus", "pbus", "fbus", "cbus", "obus", "implicit", "clock_tap"),
   //   Seq("tile"))) ++

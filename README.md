@@ -1,4 +1,4 @@
-make clean_all
+make clean_verilog
 make verilog
 make verilog CONFIG=QuadRocketSbusRingNoCConfig
 make verilog CONFIG=MultiNoCConfig

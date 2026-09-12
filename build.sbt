@@ -32,7 +32,11 @@ Compile / unmanagedResourceDirectories ++= Seq(
 )
 
 Test / unmanagedSourceDirectories +=
-  baseDirectory.value / "constellation" / "src" / "test" / "scala"
+  baseDirectory.value / "generators" / "src" / "test"
+
+// `sbt test` in this repository runs only the custom-NoC regression suites.
+// Constellation's upstream suites remain available in its own subproject.
+Test / testOptions += Tests.Filter(_.startsWith("rocketnoc.test.CustomRuche"))
 
 import Tests._
 
