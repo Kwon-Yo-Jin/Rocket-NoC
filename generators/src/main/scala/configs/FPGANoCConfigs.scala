@@ -127,8 +127,8 @@ class FPGASbusRucheNCoreConfig extends Config({
   val core_num = 32
   val mesh_x_len = math.ceil(math.sqrt(core_num.toDouble)).toInt
   val mesh_y_len = math.ceil((core_num + 4).toDouble / mesh_x_len).toInt
-  val ruche_x_factor = 2
-  val ruche_y_factor = 2
+  val ruche_x_factor = 3
+  val ruche_y_factor = 4
   new constellation.soc.WithSbusNoC(constellation.protocol.SimpleTLNoCParams(
     constellation.protocol.DiplomaticNetworkNodeMapping(
       inNodeMapping = ListMap(
@@ -140,14 +140,14 @@ class FPGASbusRucheNCoreConfig extends Config({
         "gen[0]" -> (core_num + 3))), // TSI is on the pbus, so serial-tl and pbus should be on the same node
     NoCParams(
       topology        = RucheMesh2D(mesh_x_len, mesh_y_len, ruche_x_factor, ruche_y_factor),
-      channelParamGen = (a, b) => UserChannelParams(Seq.fill(10) { UserVirtualChannelParams(4) }),//, unifiedBuffer = false),
+      channelParamGen = (a, b) => UserChannelParams(Seq.fill(9) { UserVirtualChannelParams(4) }),//, unifiedBuffer = false),
       routerParams    = (i) => UserRouterParams(
         combineRCVA=true,
         combineSAST=true,
         vcAllocator=(vP) => (p) => new PrioritizingSingleVCAllocator(vP)(p)),
       //routingRelation = NonblockingVirtualSubnetworksRouting(ShortestPathRouting(), 5, 1))
       //routingRelation = NonblockingVirtualSubnetworksRouting(RucheMesh2DDimensionOrderedRouting(), 5, 1))
-      routingRelation = NonblockingVirtualSubnetworksRouting(RucheMesh2DEscapeRouting(), 9, 1))
+      routingRelation = NonblockingVirtualSubnetworksRouting(RucheMesh2DEscapeRouting(), 5, 1))
   )) ++
   new freechips.rocketchip.rocket.WithRV32 ++
   new freechips.rocketchip.subsystem.WithEdgeDataBits(32) ++

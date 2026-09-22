@@ -36,7 +36,7 @@ Test / unmanagedSourceDirectories +=
 
 // `sbt test` in this repository runs only the custom-NoC regression suites.
 // Constellation's upstream suites remain available in its own subproject.
-Test / testOptions += Tests.Filter(_.startsWith("rocketnoc.test.CustomRuche"))
+Test / testOptions += Tests.Filter(_.startsWith("rocketnoc.test."))
 
 import Tests._
 

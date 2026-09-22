@@ -11,18 +11,28 @@ CONFIG ?= DefaultConfig
 CONFIG_LONG ?= $(CFG_PROJECT).$(CONFIG)
 MILL ?= mill
 SBT_LOG_DIR ?= $(base_dir)/log
-NOC ?= TLNoC
+
+.PHONY: verilog constellation test vis_list vis clean_all clean_verilog clean_test
 
 verilog:
 	cd $(base_dir) && $(MILL) emulator[$(TOP),$(CONFIG_LONG)].mfccompiler.compile
 
 constellation:
-	@mkdir -p log
-	(cd constellation && MAKEFLAGS='VM_PARALLEL_BUILDS=0' sbt -sbt-version 1.10.2 -batch test 2>&1) | tee $(SBT_LOG_DIR)/Constellation_Test.log
+	@mkdir -p $(SBT_LOG_DIR)
+	(cd constellation && MAKEFLAGS='VM_PARALLEL_BUILDS=0' sbt -sbt-version 1.10.2 -batch test) | tee $(SBT_LOG_DIR)/Constellation_Test.log
 
 test:
-	@mkdir -p log
-	MAKEFLAGS='VM_PARALLEL_BUILDS=0' sbt -sbt-version 1.10.2 -batch test 2>&1 | tee $(SBT_LOG_DIR)/Custom_Test.log
+	@mkdir -p $(SBT_LOG_DIR)
+	MAKEFLAGS='VM_PARALLEL_BUILDS=0' sbt -sbt-version 1.10.2 -batch 'testOnly rocketnoc.test.CustomDUTEvalNoCTest' 2>&1    | tee $(SBT_LOG_DIR)/Custom_Test.log
+	MAKEFLAGS='VM_PARALLEL_BUILDS=0' sbt -sbt-version 1.10.2 -batch 'testOnly rocketnoc.test.BaselineMeshEvalNoCTest' 2>&1 | tee $(SBT_LOG_DIR)/Baseline_Test.log
+#	MAKEFLAGS='VM_PARALLEL_BUILDS=0' sbt -sbt-version 1.10.2 -batch 'testOnly rocketnoc.test.CustomDUTNoCTest' 2>&1        | tee $(SBT_LOG_DIR)/Custom_Test.log
+#	MAKEFLAGS='VM_PARALLEL_BUILDS=0' sbt -sbt-version 1.10.2 -batch 'testOnly rocketnoc.test.CustomDUTTLNoCTest' 2>&1      | tee $(SBT_LOG_DIR)/Custom_TLTest.log
+#	MAKEFLAGS='VM_PARALLEL_BUILDS=0' sbt -sbt-version 1.10.2 -batch 'testOnly rocketnoc.test.CustomDUTAXI4NoCTest' 2>&1    | tee $(SBT_LOG_DIR)/Custom_AXI4Test.log
+#	MAKEFLAGS='VM_PARALLEL_BUILDS=0' sbt -sbt-version 1.10.2 -batch 'testOnly rocketnoc.test.CustomDUTEvalNoCTest' 2>&1    | tee $(SBT_LOG_DIR)/Custom_EvalTest.log
+#	MAKEFLAGS='VM_PARALLEL_BUILDS=0' sbt -sbt-version 1.10.2 -batch 'testOnly rocketnoc.test.BaselineMeshNoCTest' 2>&1     | tee $(SBT_LOG_DIR)/Baseline_Test.log
+#	MAKEFLAGS='VM_PARALLEL_BUILDS=0' sbt -sbt-version 1.10.2 -batch 'testOnly rocketnoc.test.BaselineMeshTLNoCTest' 2>&1   | tee $(SBT_LOG_DIR)/Baseline_TLTest.log
+#	MAKEFLAGS='VM_PARALLEL_BUILDS=0' sbt -sbt-version 1.10.2 -batch 'testOnly rocketnoc.test.BaselineMeshAXI4NoCTest' 2>&1 | tee $(SBT_LOG_DIR)/Baseline_AXI4Test.log
+#	MAKEFLAGS='VM_PARALLEL_BUILDS=0' sbt -sbt-version 1.10.2 -batch 'testOnly rocketnoc.test.BaselineMeshEvalNoCTest' 2>&1 | tee $(SBT_LOG_DIR)/Baseline_EvalTest.log
 
 vis_list:
 	find . -name '*.noc.adjlist' -o -name '*.noc.xy' -o -name '*.noc.edgeprops'
@@ -44,3 +54,4 @@ clean_test:
 
 clean_all: clean_test clean_verilog
 	rm -rf *.svg
+	rm -rf *.png

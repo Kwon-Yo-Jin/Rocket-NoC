@@ -71,7 +71,12 @@ abstract class AXI4NoCTest(configs: Seq[Config]) extends BaseNoCTest(p => new AX
 abstract class EvalNoCTest(configs: Seq[Config]) extends BaseNoCTest(p => new EvalNoCChiselTester()(p), configs, Seq("../../../constellation/src/main/resources/csrc/netrace/netrace.o"))
 
 /** The four suites selected by the root build.sbt regression filter. */
-class CustomRucheNoCTest extends NoCTest(Seq(new CustomRucheNoCConfig))
-class CustomRucheTLNoCTest extends TLNoCTest(Seq(new CustomRucheTLNoCConfig))
-class CustomRucheAXI4NoCTest extends AXI4NoCTest(Seq(new CustomRucheAXI4NoCConfig))
-class CustomRucheEvalNoCTest extends EvalNoCTest(Seq(new CustomRucheEvalNoCConfig))
+class CustomDUTNoCTest extends NoCTest(Seq(new CustomDUTNoCConfig))
+class CustomDUTTLNoCTest extends TLNoCTest(Seq(new CustomDUTTLNoCConfig))
+class CustomDUTAXI4NoCTest extends AXI4NoCTest(Seq(new CustomDUTAXI4NoCConfig))
+class CustomDUTEvalNoCTest extends EvalNoCTest(Seq(new CustomDUTEvalNoCConfig))
+
+class BaselineMeshNoCTest extends NoCTest(Seq(new BaselineMeshNoCConfig))
+class BaselineMeshTLNoCTest extends TLNoCTest(Seq(new BaselineMeshTLNoCConfig))
+class BaselineMeshAXI4NoCTest extends AXI4NoCTest(Seq(new BaselineMeshAXI4NoCConfig))
+class BaselineMeshEvalNoCTest extends EvalNoCTest(Seq(new BaselineMeshEvalNoCConfig))
